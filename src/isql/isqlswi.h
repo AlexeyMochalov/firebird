@@ -61,7 +61,8 @@ enum isql_switches
 #ifdef DEV_BUILD
 	IN_SW_ISQL_EXTRACTTBL	= 26,
 #endif
-	IN_SW_ISQL_HELP 		= 27
+	IN_SW_ISQL_HELP 		= 27,
+	IN_SW_ISQL_CLEARHISTORY = 28
 };
 
 
@@ -102,6 +103,7 @@ static const Switches::in_sw_tab_t isql_in_sw_table[] =
 #endif
 	{IN_SW_ISQL_VERSION		, 0, "Z"				, 0, 0, 0, false, false, 141	, 1, NULL, iqoArgNone},
 	{IN_SW_ISQL_HELP 		, 0, "?"				, 0, 0, 0, false, false, 0		, 1, NULL, iqoArgNone},
+	{IN_SW_ISQL_CLEARHISTORY, 0, "CHIST"			, 0, 0, 0, false, false, 197	, 1, NULL, iqoArgNone},
 	{IN_SW_ISQL_0			, 0, NULL				, 0, 0, 0, false, false, 0		, 0, NULL, iqoArgNone}
 };
 

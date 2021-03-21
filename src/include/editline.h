@@ -34,6 +34,9 @@ extern "C" {
 
 extern char *readline(const char*);
 extern void add_history(char*);
+extern int read_history(const char *filename);
+extern int write_history(const char *filename);
+extern void clear_history(void);
 
 
 #ifdef __cplusplus

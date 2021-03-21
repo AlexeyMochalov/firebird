@@ -673,6 +673,9 @@ int ISQL_main(int argc, char* argv[])
 	isqlGlob.Out = stdout;
 	isqlGlob.Errfp = stderr;
 
+	// load command history from default file
+	read_history(NULL);
+
 	const processing_state ret = parse_arg(argc, argv, tabname);
 
 	// Can't do a simple assignment because parse_arg may set Interactive to false.
@@ -732,6 +735,10 @@ int ISQL_main(int argc, char* argv[])
 
 	default:
 		do_isql();
+
+		// save command history to default file
+		write_history(NULL);
+
 		// keep Exit_value to whatever it is set
 		// by do_isql()
 		// Exit_value = FINI_OK;
@@ -7127,6 +7134,10 @@ static processing_state parse_arg(int argc, SCHAR** argv, SCHAR* tabname)
 					Version_info = true;
 					IUTILS_msg_get(VERSION, errbuf, SafeArg() << FB_VERSION);
 					isqlGlob.printf("%s%s", errbuf, NEWLINE);
+					break;
+
+				case IN_SW_ISQL_CLEARHISTORY:
+					clear_history();
 					break;
 
 				case IN_SW_ISQL_SQLDIALECT:
