@@ -82,6 +82,7 @@ SLONG	API_ROUTINE fb_interpret(char*, unsigned int, const ISC_STATUS**);
 SLONG	API_ROUTINE gds__interprete(char*, ISC_STATUS**);
 void	API_ROUTINE gds__interprete_a(SCHAR*, SSHORT*, ISC_STATUS*, SSHORT*);
 
+void 	gds__change_log_output_file(const char*);
 void	API_ROUTINE gds__log(const TEXT*, ...);
 void	API_ROUTINE gds__trace(const char*);
 void	API_ROUTINE gds__trace_raw(const char*, unsigned int = 0);

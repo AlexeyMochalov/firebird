@@ -101,6 +101,7 @@ EXPORTS
 	gds__edit@8					PRIVATE
 	gds__free@4					PRIVATE
 	gds__get_prefix@8			PRIVATE
+	gds__change_log_output_file@0	PRIVATE
 	gds__log@0					PRIVATE
 	gds__msg_format@40			PRIVATE
 	gds__msg_lookup@24			PRIVATE
