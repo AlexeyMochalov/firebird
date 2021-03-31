@@ -57,7 +57,6 @@ EXPORTS
     gds__get_segment=fbclient.gds__get_segment @39
     gds__get_slice=fbclient.gds__get_slice @40
     gds__interprete=fbclient.gds__interprete @41
-    gds__change_log_output_file=fbclient.gds__change_log_output_file @281
     gds__log=fbclient.gds__log @42
     gds__msg_format=fbclient.gds__msg_format @43
     gds__msg_lookup=fbclient.gds__msg_lookup @44

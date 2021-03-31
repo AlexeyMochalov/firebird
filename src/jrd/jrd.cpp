@@ -1756,10 +1756,8 @@ JAttachment* JProvider::internalAttach(CheckStatusWrapper* user_status, const ch
 				attachment->att_utility = Attachment::UTIL_GBAK;
 			else if (options.dpb_gstat_attach)
 				attachment->att_utility = Attachment::UTIL_GSTAT;
-			else if (options.dpb_gfix_attach) {
-				gds__change_log_output_file(Firebird::Config::getGfixLogOutputFileName());
+			else if (options.dpb_gfix_attach)
 				attachment->att_utility = Attachment::UTIL_GFIX;
-			}
 
 			if (options.dpb_working_directory.hasData())
 				attachment->att_working_directory = options.dpb_working_directory;

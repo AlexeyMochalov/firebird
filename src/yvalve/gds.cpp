@@ -121,8 +121,6 @@ static char* fb_prefix = NULL;
 static char* fb_prefix_lock = NULL;
 static char* fb_prefix_msg = NULL;
 
-static const char* current_log_file = LOGFILE;
-
 #include "gen/msgs.h"
 
 const SLONG GENERIC_SQLCODE		= -999;
@@ -1169,23 +1167,6 @@ void API_ROUTINE gds__trace(const TEXT* text)
 	gds__trace_raw(s.c_str(), s.length());
 }
 
-void gds__change_log_output_file(const char* log_file_name) {
-/**************************************
- *
- *	g d s _ c h a n g e _ l o g _ o u t p u t _ f i l e
- *
- **************************************
- *
- * Functional description
- *	Set cutom log file until restored default
- *
- **************************************/
-	if (log_file_name) {
-		current_log_file = log_file_name;
-		return;
-	}
-	current_log_file = LOGFILE;
-}
 
 void API_ROUTINE gds__log(const TEXT* text, ...)
 {
@@ -1234,8 +1215,7 @@ void API_ROUTINE gds__log(const TEXT* text, ...)
 
 #endif // DARWIN
 
-	// Firebird::PathName name = fb_utils::getPrefix(Firebird::IConfigManager::DIR_LOG, LOGFILE);
-	Firebird::PathName name = fb_utils::getPrefix(Firebird::IConfigManager::DIR_LOG, current_log_file);
+	Firebird::PathName name = fb_utils::getPrefix(Firebird::IConfigManager::DIR_LOG, LOGFILE);
 
 #ifdef WIN_NT
 	WaitForSingleObject(CleanupTraceHandles::trace_mutex_handle, INFINITE);
