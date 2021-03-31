@@ -1167,20 +1167,18 @@ void API_ROUTINE gds__trace(const TEXT* text)
 	gds__trace_raw(s.c_str(), s.length());
 }
 
-
-void API_ROUTINE gds__log(const TEXT* text, ...)
-{
 /**************************************
  *
- *	g d s _ l o g
+ *	g d s _ l o g _ t o _ f i l e _ r o u t i n e
  *
  **************************************
  *
  * Functional description
- *	Post an event to a log file.
+ *	Posting an event to a log file routine.
+ *	Other log functions call this.
  *
  **************************************/
-	va_list ptr;
+void gds__log_to_file_routine(const char *logFileName, const TEXT* text, va_list args) {
 	time_t now;
 
 #ifdef HAVE_GETTIMEOFDAY
@@ -1204,9 +1202,7 @@ void API_ROUTINE gds__log(const TEXT* text, ...)
 		Firebird::MutexLockGuard(logMutex, FB_FUNCTION);
 		fb_utils::snprintf(buffer, sizeof(buffer), "\n\n%s\t%.25s\t", hostName, ctime(&now));
 		unsigned hdrlen = strlen(buffer);
-		va_start(ptr, text);
-		VSNPRINTF(&buffer[hdrlen], sizeof(buffer) - hdrlen, text, ptr);
-		va_end(ptr);
+		VSNPRINTF(&buffer[hdrlen], sizeof(buffer) - hdrlen, text, args);
 		buffer[sizeof(buffer) - 1] = '\0';		// be safe
 
 		osLog(buffer);
@@ -1215,7 +1211,7 @@ void API_ROUTINE gds__log(const TEXT* text, ...)
 
 #endif // DARWIN
 
-	Firebird::PathName name = fb_utils::getPrefix(Firebird::IConfigManager::DIR_LOG, LOGFILE);
+	Firebird::PathName name = fb_utils::getPrefix(Firebird::IConfigManager::DIR_LOG, logFileName ? logFileName : LOGFILE);
 
 #ifdef WIN_NT
 	WaitForSingleObject(CleanupTraceHandles::trace_mutex_handle, INFINITE);
@@ -1242,9 +1238,7 @@ void API_ROUTINE gds__log(const TEXT* text, ...)
 #endif
 
 		fprintf(file, "\n%s\t%.25s\t", hostName, ctime(&now));
-		va_start(ptr, text);
-		vfprintf(file, text, ptr);
-		va_end(ptr);
+		vfprintf(file, text, args);
 		fprintf(file, "\n\n");
 
 		// This will release file lock set in posix case
@@ -1253,6 +1247,44 @@ void API_ROUTINE gds__log(const TEXT* text, ...)
 #ifdef WIN_NT
 	ReleaseMutex(CleanupTraceHandles::trace_mutex_handle);
 #endif
+}
+
+void API_ROUTINE gds__log(const TEXT* text, ...)
+{
+/**************************************
+ *
+ *	g d s _ l o g
+ *
+ **************************************
+ *
+ * Functional description
+ *	Post an event to a default log file.
+ *
+ **************************************/
+	va_list ptr;
+
+	va_start(ptr, text);
+	gds__log_to_file_routine(LOGFILE, text, ptr);
+	va_end(ptr);
+}
+
+void API_ROUTINE gds__log_to_file(const char *logFileName, const TEXT* text, ...)
+{
+/**************************************
+ *
+ *	g d s _ l o g _ f i l e
+ *
+ **************************************
+ *
+ * Functional description
+ *	Post an event to a log file.
+ *
+ **************************************/
+	va_list ptr;
+
+	va_start(ptr, text);
+	gds__log_to_file_routine(logFileName, text, ptr);
+	va_end(ptr);
 }
 
 #ifdef NOT_USED_OR_REPLACED

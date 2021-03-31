@@ -63,9 +63,9 @@
 				type getParameterName() const;
 		   form, for world-wide (global) parameters
 				static type getParameterName();
-		   should be used. Also, for world-wide parameters, values of default 
+		   should be used. Also, for world-wide parameters, values of default
 		   config instance (see getDefaultConfig()) should be used.
-		5. Macros CONFIG_GET_GLOBAL_XXX and CONFIG_GET_PER_DB_XXX helps to 
+		5. Macros CONFIG_GET_GLOBAL_XXX and CONFIG_GET_PER_DB_XXX helps to
 		   declare and implement trivial getXXX functions and to enforce rule (4).
 **/
 
@@ -186,6 +186,7 @@ enum ConfigKey
 	KEY_DATA_TYPE_COMPATIBILITY,
 	KEY_USE_FILESYSTEM_CACHE,
 	KEY_INLINE_SORT_THRESHOLD,
+	KEY_GFIX_LOG_OUTPUT_FILE_NAME,
 	MAX_CONFIG_KEY		// keep it last
 };
 
@@ -300,7 +301,8 @@ constexpr ConfigEntry entries[MAX_CONFIG_KEY] =
 	{TYPE_BOOLEAN,	"ClearGTTAtRetaining",		false,	false},
 	{TYPE_STRING,	"DataTypeCompatibility",	false,	nullptr},
 	{TYPE_BOOLEAN,	"UseFileSystemCache",		false,	true},
-	{TYPE_INTEGER,	"InlineSortThreshold",		false,	1000}		// bytes
+	{TYPE_INTEGER,	"InlineSortThreshold",		false,	1000},		// bytes
+	{TYPE_STRING,	"GfixLogOutputFileName",	true,	nullptr}
 };
 
 
@@ -430,7 +432,7 @@ public:
 
 
 	// CONFIG_GET_GLOBAL_XXX (CONFIG_GET_PER_DB_XXX) set of macros helps to
-	// create trivial static (non-static) getXXX functions. 
+	// create trivial static (non-static) getXXX functions.
 	// Correctness of declaration and implementation is enforced with help
 	// of entries[XXX].is_global.
 
@@ -623,6 +625,8 @@ public:
 	bool getUseFileSystemCache(bool* pPresent = nullptr) const;
 
 	CONFIG_GET_PER_DB_KEY(ULONG, getInlineSortThreshold, KEY_INLINE_SORT_THRESHOLD, getInt);
+
+	CONFIG_GET_GLOBAL_STR(getGfixLogOutputFileName, KEY_GFIX_LOG_OUTPUT_FILE_NAME);
 };
 
 // Implementation of interface to access master configuration file
